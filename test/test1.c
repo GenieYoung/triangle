@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "triangle.h"
 
-// cc -O -o ./test1 ./test1.c ../triangle.o -I.. -lm
+// cc -O -o ./test1 ./test1.c ../triangle/triangle.o -I../triangle -lm
 
 void export_obj(struct triangulateio* out);
 
