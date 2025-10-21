@@ -6,7 +6,8 @@
 
 // cc -O -o ./test1 ./test1.c ../triangle/triangle.o -I../triangle -lm
 
-void export_obj(struct triangulateio* out);
+void export_pslg(struct triangulateio* in);
+void export_mesh(struct triangulateio* out);
 
 int main()
 {
@@ -48,6 +49,8 @@ int main()
 
   in.numberofholes = 0;
 
+  export_pslg(&in);
+
   out.pointlist = (REAL *) NULL;            
   out.pointmarkerlist = (int *) NULL;       
   out.pointattributelist = (REAL *) NULL;
@@ -56,7 +59,7 @@ int main()
   out.trianglelist = (int *) NULL;   
 
   triangulate("pzD", &in, &out, (struct triangulateio *) NULL);
-  export_obj(&out);
+  export_mesh(&out);
 
   /* Free all allocated arrays, including those allocated by Triangle. */
 
@@ -70,7 +73,24 @@ int main()
   return 0;
 }
 
-void export_obj(struct triangulateio* out) {
+void export_pslg(struct triangulateio* in) {
+    FILE* fp = fopen("pslg.obj", "w");
+    if(!fp) {
+        printf("Failed to open pslg.obj for writing\n");
+        return;
+    }
+    for(int i = 0; i < in->numberofpoints; ++i) {
+        fprintf(fp, "v %.6f %.6f 0.0\n", in->pointlist[i*2], in->pointlist[i*2 + 1]);
+    }
+    for(int i = 0; i < in->numberofsegments; ++i) {
+        fprintf(fp, "l %d %d\n", 
+        in->segmentlist[i * 2] + 1,
+        in->segmentlist[i * 2 + 1] + 1);
+    }
+    fclose(fp);
+}
+
+void export_mesh(struct triangulateio* out) {
     FILE* fp = fopen("output.obj", "w");
     if(!fp) {
         printf("Failed to open output.obj for writing\n");
