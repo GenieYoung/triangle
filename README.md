@@ -2,11 +2,11 @@
 
 ```  
 cd triangle
-cc -DTRILIBRARY -O -c triangle.c
+cc -DTRILIBRARY -O -c triangle.c -g
 ```
 
 ### build test
 ```
 cd test
-cc -O -o ./test1 ./test1.c ../triangle/triangle.o -I../triangle -lm
+cc -O -o ./test1 ./test1.c ../triangle/triangle.o -I../triangle -lm -g
 ```
